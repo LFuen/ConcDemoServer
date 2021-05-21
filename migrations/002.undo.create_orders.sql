@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS orders;
+DROP TYPE char1;
+DROP TYPE char2;
+DROP TYPE phase;
