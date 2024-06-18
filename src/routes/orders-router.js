@@ -3,7 +3,6 @@ const OrdersService = require("../services/orders-service");
 const jsonParser = express.json();
 const ordersRouter = express.Router();
 const path = require("path");
-const { requireAuth } = require("../middleware/jwt-auth");
 const { colors, phases } = require("../store");
 
 ordersRouter
@@ -35,7 +34,7 @@ ordersRouter
 
   ordersRouter
     .route("/new/:orderId")
-    .patch(requireAuth, jsonParser, async (req, res, next) => {
+    .patch(jsonParser, async (req, res, next) => {
       const db = req.app.get("db")
       let currentOrder = await OrdersService.getOrderById(db, req.params.orderId);
       let updatedOrder = await OrdersService.updateOrder(db, req.params.orderId,  { amount: currentOrder.amount + req.body.amount })
@@ -48,14 +47,13 @@ ordersRouter
   .get((req, res, next) => {
     return res.status(200).json(res.order);
   })
-  .delete(requireAuth, (req, res, next) => {
+  .delete((req, res, next) => {
     const db = req.app.get("db");
-    // const { id } = req.params;
     OrdersService.deleteOrder(db, req.params.orderId)
       .then(() => res.status(204).end())
       .catch(next);
   })
-  .patch(requireAuth, jsonParser, (req, res, next) => {
+  .patch(jsonParser, (req, res, next) => {
     const db = req.app.get("db");
     const { next_order, product, color, amount, prty_lvl, phase } = req.body;
     const newInfo = { next_order, product, color, amount, prty_lvl, phase };
@@ -92,35 +90,6 @@ async function checkOrderExists(req, res, next) {
   }
 }
 
-  // ordersRouter
-  //   .route('/colorprod/:color/:product')
-  //   .get((req, res, next) => {
-  //     const db = req.app.get("db")
-  //     OrdersService.getOrderByColorProd(db, req.params.color, req.params.product)
-  //     .then(order => {
-  //       if (!order) return res.status.status(400).json({message: "Order Not Found"})
-  //       return res.status(200).json(order)
-  //     })
-  //   })
-
-//   ordersRouter
-//   .route("/levels/:nextOrder")
-//   .patch(requireAuth, jsonParser, async (req, res, next) => {
-//     const db = req.app.get("db");
-//     let nextOrder = await OrdersService.getOrderById(db, req.params.nextOrder);
-//     nextOrder = await OrdersService.updateOrder(db, nextOrder.order_id, {
-//       amount: nextOrder.amount + 1,
-//     });
-//     return res.status(200).json(nextOrder);
-//   });
-
-// ordersRouter
-//   .route("/fkey/:orderId")
-//   .get(async (req, res, next) => {
-//     const {orderId} = req.params;
-//     const order = await OrdersService.getOrderByFkey(req.app.get("db"), orderId);
-//     return res.status(200).json(order)
-//   })
 
 
 module.exports = ordersRouter;

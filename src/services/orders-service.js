@@ -23,25 +23,6 @@ const OrdersService = {
       .where( {color, product })
       .then(rows => rows[0])
   },
-  // getBySourceOrder(db, source_order) {
-  //   return db("orders")
-  //     .select("*")
-  //     .where({ source_order })
-  //     .then((rows) => rows[0])
-  //     .then((order) => {
-  //       if (!!order) return OrdersService.serializeOrder(order);
-  //       else return order;
-  //     });
-  // }
-  // ,
-  // updateLevel(db, source_order, amount) {
-  //   return db("orders")
-  //   .where( { source_order } )
-  //   .update({ amount })
-  //   .returning("*")
-  //   .then((rows) => rows[0])
-  // }
-  // ,
   insertOrder(db, order) {
     return db
       .insert(order)
@@ -54,7 +35,6 @@ const OrdersService = {
       });
   },
   deleteOrder(db, order_id) {
-    // console.log(order_id, "THIS IS IN DELETE ORDER")
     return db("orders").where({ order_id }).delete();
   },
  async deleteSingleOrder(db, order_id, amount) {

@@ -4,7 +4,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const { NODE_ENV, CLIENT_ORIGIN } = require('./config')
-// const validateBearerToken = require('./middleware/bearer-token')
 const errorHandler = require('./middleware/error-handler')
 const authRouter = require('./routes/auth-router')
 const ordersRouter = require('./routes/orders-router')
@@ -20,10 +19,8 @@ app.use(
     })
   );
 
-// app.use(cors())
 
 app.use(errorHandler)
-// app.use(validateBearerToken);
 
 
 app.use("/api/auth", authRouter);

@@ -3,7 +3,6 @@ const ProductsService = require("../services/products-service");
 const jsonParser = express.json();
 const productsRouter = express.Router();
 const path = require("path");
-const { requireAuth } = require("../middleware/jwt-auth");
 
 
 
@@ -36,14 +35,14 @@ productsRouter
   .get((req, res, next) => {
     return res.status(200).json(res.product);
   })
-  .delete(requireAuth, (req, res, next) => {
+  .delete((req, res, next) => {
     const db = req.app.get("db");
     const { id } = res.product;
     productsService.deleteProduct(db, id)
       .then(() => res.status(204).end())
       .catch(next);
   })
-  .patch(requireAuth, jsonParser, (req, res, next) => {
+  .patch(jsonParser, (req, res, next) => {
     const db = req.app.get("db");
     const { name } = req.body;
     const newInfo = { name };

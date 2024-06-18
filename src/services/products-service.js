@@ -4,7 +4,7 @@ const ProductsService = {
   getProductById(db, id) {
     return db("products")
       .select("*")
-      .where({ product_id })
+      .where({ id })
       .first()
       .then((product) => {
         if (!!product) return ProductsService.serializeProduct(product);
